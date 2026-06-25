@@ -5,7 +5,11 @@ ticketPrice=0
 
 if height >= 120:
     print("You can Ride")
-    if age > 18:
+
+    if age>= 45 and age <=55:
+        print("Everything is going to be ok. Have a free ride on us!")
+
+    elif age > 18:
         print("Adult tickets are $12")
         ticketPrice=12
     elif age>=12 and age <=18:
