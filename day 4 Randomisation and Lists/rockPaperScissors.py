@@ -1,5 +1,5 @@
 import random
-from validationFunctions import inputValidation, validateInteger
+from validationFunctions import validateInteger
 
 
 rock='''
