@@ -78,6 +78,7 @@ def checkTransaction(drinkCost,userMoney):
 
 def makeCoffee(drink):
     """Make the drink using the necessary resources. Returns a dictionary of resources updated."""
+
     drinkIngredients=drinks[drink]["ingredients"]
     amountWater=drinkIngredients["water"]
     amountCoffee=drinkIngredients["coffee"]
@@ -89,12 +90,12 @@ def makeCoffee(drink):
     if drink != "espresso":
         amountMilk=drinkIngredients["milk"]
         machineResources["milk"]= machineResources["milk"]-amountMilk
-    
-    print(machineResources)
+
     return machineResources
 
+"""
 def checkResources(drink):
-    """Check if there are enough resources to make a drink. Returns True when are and False otherwise"""
+   # Check if there are enough resources to make a drink. Returns True when are and False otherwise
 
     drinkIngredients=drinks[drink]["ingredients"]
     amountWater=drinkIngredients["water"]
@@ -111,16 +112,54 @@ def checkResources(drink):
                   return True
         else:
             return False 
+"""
+            
+def checkResources2(orderIngredients):
+    """Check if there are enough resources to make a drink. Returns True when are and otherwise False"""
+
+    for ingredient in orderIngredients:
+        if orderIngredients[ingredient] > machineResources[ingredient]:
+            print(f"Sorry there is not enough {ingredient}")
+            return False
+    return True
+
+def addResource(resourceName,difference):
+    """Adds a certain amount of resource to the coffee machine. Return a dictionary with the resource updated"""
+    if difference>0:
+        machineResources[resourceName]=machineResources[resourceName]+difference
+        if resourceName !="coffee":
+            print(f"You added {difference}ml of {resourceName}.")
+        else:
+            print(f"You added {difference}g of {resourceName}.")
+
+    return machineResources
 
 
+def updateResources(machineResources):
+    """Update all the resources of the machine. Return a dictionary with all resources updated"""
+    actualWater= machineResources["water"]
+    actualMilk = machineResources["milk"]
+    actualCoffee =machineResources["coffee"]
+
+    differenceWater= maxWater - actualWater
+    differenceMilk= maxMilk - actualMilk
+    differenceCoffee= maxCoffee - actualCoffee
+
+    machineResources=addResource("water",differenceWater)
+    machineResources=addResource("milk",differenceMilk)
+    machineResources=addResource("coffee",differenceCoffee)
+    
+    return machineResources 
 
 #Start the variables
 isOn=True
 fileName="moneyEarned.txt"
-fileResources="machineResoureces.json"
 totalMoney=float(readFile(fileName))
 #machineResources=readJsonFile(fileResources)
 
+maxWater=machineResources["water"] # 300ml
+maxMilk=machineResources["milk"] # 200ml
+maxCoffee=machineResources["coffee"]# 100g
 
 while isOn:
     userChoose=inputValidation("What would you like? (espresso/latte/cappuccino): ",["espresso","latte","cappuccino","off","report"])
@@ -128,21 +167,28 @@ while isOn:
         isOn=False # Ends the program
     elif userChoose =="report":
         reportResources()
+       
+       # Update a resource if the user want.
+        if machineResources["water"] < maxWater or machineResources["milk"] < maxMilk or machineResources["coffee"] < maxCoffee:
+            answer= inputValidation("Do you want to add the resources? Type 'y' or 'n': ",["y","n"])
+            if answer == "y":
+                machineResources=updateResources(machineResources)
 
     else:
         # check if the resources are sufficient to make the drink
-        if checkResources(userChoose):
+        drinkIngredients=drinks[userChoose]["ingredients"]
+        if checkResources2(drinkIngredients):
             #Process coins: Receives the money from the user
             userMoney=insertCoins()
             drinkCost=drinks[userChoose]["cost"]
+
 
         # Check if the transaction is successful
             if checkTransaction(drinkCost,userMoney):
                 totalMoney+=drinkCost      
                 writeFile(fileName,f"{totalMoney}") # Save the total money earned in the text file.
-                machineResources=makeCoffee(userChoose)    
-                #writeObjectInJson(fileResources,machineResources) 
-                print(f"Here is your {userChoose}. Enjoy!")
+                machineResources=makeCoffee(userChoose)   
+                print(f"Here is your {userChoose} ☕. Enjoy!")
 
       
         

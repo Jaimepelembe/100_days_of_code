@@ -1,20 +1,21 @@
 def inputValidation(text,listElements):
     """Returns a valid element typed by the user."""
-    try:
-        entry=input(text).lower()
-        lowerList=list(map(str.lower,listElements)) #Transform the list elements in lower case
-    except Exception as e:
-        print (e)
 
-    else:
+    while True:
+        try:
+            entry=input(text).lower()
+            lowerList=list(map(str.lower,listElements)) #Transform the list elements in lower case
+        except Exception as e:
+            print (e)
 
-        if entry in lowerList:
-            return entry
-        elif entry == "":
-            print(f"Space is an invalid option, please select one of this options {listElements}")
         else:
-            print(f"{entry} is an invalid option, please select one of this options {listElements}")
-        inputValidation(text,listElements)
+
+            if entry in lowerList:
+                return entry
+            elif entry == "" or entry == " ":
+                print(f"Space is an invalid option, please select one of this options {listElements}")
+            else:
+                print(f"{entry} is an invalid option, please select one of this options {listElements}")
 
 def validateInteger(text):
     """"Validate if a String typed is a integer."""
@@ -61,14 +62,16 @@ def validateIntervalOfIntegers(text,lowerLimit,upperLimit):
 
 
 def validateString(text):
-    string=input(text)
-    if isinstance(string,str) and string!=None and string !="":
-        return string
-    else:
-        if string == "":
-            print(f"Espaco nao e uma String valida. Por favor tente de novo")
-
+    """Validate a String inserted by the user. Returns the String"""
+    while True:
+        string=input(text)
+        if isinstance(string,str) and string!=None and string !="":
+            return string
         else:
-            print(f"{string} nao e uma String valida. Por favor tente de novo")
+            if string == "":
+                print(f"Espaco nao e uma String valida. Por favor tente de novo")
 
-        validateString(text)
+            else:
+                print(f"{string} nao e uma String valida. Por favor tente de novo")
+
+
