@@ -37,3 +37,18 @@ def ganhar_ponto2():
 
 ganhar_ponto2()
 ganhar_ponto2()
+
+
+# Block scope
+#   Python does not have block scope.
+print("Block Scope:")
+listEnemies=["Skeleton","Zombie","Alien"]
+gameLevel=3
+
+def createEnemy():
+    newEnemy=""
+    if gameLevel <5:
+        newEnemy=listEnemies[0]
+    print(newEnemy)
+
+createEnemy()
